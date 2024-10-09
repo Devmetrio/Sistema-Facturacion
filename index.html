@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XML format</title>
+    <link rel="stylesheet" href="test.css">
+</head>
+
+<body>
+    <form class="form-text" action="#" id="formId">
+        <h1>Capturar datos documento XML</h1>
+        <hr>
+        <div>
+            <input type="file" id="inputId" accept=".xml">
+            <button class="extraer" type="button">Extraer</button> <!-- Agregado type="button" -->
+        </div>
+        <hr>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="3">Información del Período y Operaciones</th>
+                        <th colspan="2">Fechas Clave de la Transacción</th>
+                        <th colspan="5">Detalles del Comprobante de Pago</th>
+                        <th colspan="3">Identificación del Proveedor</th>
+                        <th colspan="7">Valores Monetarios de las Adquisiciones</th>
+                        <th colspan="3">Otros Impuestos</th>
+                        <th colspan="3">Totales y Moneda</th>
+                        <th colspan="5">Modificación de Comprobantes</th>
+                        <th colspan="3">Detracción y Retención</th>
+                        <th colspan="2">Clasificación y Contratos</th>
+                        <th colspan="4">Errores en la Transacción</th>
+                        <th colspan="2">Estado y Cancelación de Comprobantes</th>
+                    </tr>
+                    <tr>
+                        <th>Periodo</th>
+                        <th>CUO</th>
+                        <th>N° Asiento</th>
+                        <th>Fecha Emisión</th>
+                        <th>Fecha Vencimiento/Pago</th>
+                        <th>Tipo Comprobante</th>
+                        <th>Serie</th>
+                        <th>Año Emisión</th>
+                        <th>Número Comprobante</th>
+                        <th>Número Final</th>
+                        <th>Tipo Documento</th>
+                        <th>RUC/DNI</th>
+                        <th>Nombre Proveedor</th>
+                        <th>Base Imponible Gravadas</th>
+                        <th>Monto IGV/IPM</th>
+                        <th>Base Imponible Mixtas</th>
+                        <th>Monto IGV/IPM Mixtas</th>
+                        <th>Base Imponible No Gravadas</th>
+                        <th>Monto IGV/IPM No Gravadas</th>
+                        <th>Valor No Gravadas</th>
+                        <th>Impuesto Selectivo</th>
+                        <th>Impuesto Bolsas Plásticas</th>
+                        <th>Otros Tributos</th>
+                        <th>Importe Total</th>
+                        <th>Código Moneda</th>
+                        <th>Tipo de Cambio</th>
+                        <th>Fecha Comprobante Modificado</th>
+                        <th>Tipo Comprobante Modificado</th>
+                        <th>Serie Comprobante Modificado</th>
+                        <th>Código Aduanero</th>
+                        <th>N° Comprobante Modificado</th>
+                        <th>Fecha Depósito Detracción</th>
+                        <th>N° Constancia Detracción</th>
+                        <th>Comprobante con Retención</th>
+                        <th>Clasificación Bienes</th>
+                        <th>Identificación Contrato</th>
+                        <th>Error Tipo de Cambio</th>
+                        <th>Error Proveedor No Habido</th>
+                        <th>Error Exoneración</th>
+                        <th>Error DNI/RUC</th>
+                        <th>Comprobantes Cancelados</th>
+                        <th>Estado Anotación/Ajuste</th>
+                    </tr>
+                </thead>
+                <tbody id="table-content">
+                    <!-- Aquí se insertarán los datos extraídos -->
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+    <button class="btn-gozu" id="btnGozu" hidden>Exportar excel</button>
+
+    <script src="script.js"></script>
+    <script src="xlsx.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+</body>
+
+</html>
