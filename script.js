@@ -6,6 +6,125 @@ const BTN = document.getElementById("btnGozu");
 let contadorCUO = 1;  // Este contador puede almacenarse y recuperarse de una base de datos
 let contadorAsiento = 1;  // También puede almacenarse en base de datos
 let numeroSecuencialVenta;
+
+const datos = [
+    {
+        RUC_Campo12: '20607739596',
+        Nombre: 'ABRAXAS FE S.A.C.',
+        RUC_Estructura3: '20607739596',
+        Fecha_Campo2: '2024-01-20', // Simulando fecha de renuncia a la exoneración
+    },
+    {
+        RUC_Campo12: '10460238396',
+        Nombre: 'ABRIL ARAGON JOSE LUIS',
+        RUC_Estructura3: '10460238396',
+        Fecha_Campo2: '2015-11-01',
+    },
+    {
+        RUC_Campo12: '10449285854',
+        Nombre: 'ABRIL ARAGON MONICA PILAR',
+        RUC_Estructura3: '10449285854',
+        Fecha_Campo2: '2016-05-01',
+    },
+    {
+        RUC_Campo12: '10484927508',
+        Nombre: 'ABRIL CRUZ ANYELA',
+        RUC_Estructura3: '10484927508',
+        Fecha_Campo2: '2014-09-01',
+    },
+    {
+        RUC_Campo12: '20458116629',
+        Nombre: 'ABV AGRARIA S.A.C',
+        RUC_Estructura3: '20458116629',
+        Fecha_Campo2: '2000-08-01',
+    },
+    {
+        RUC_Campo12: '20604562415',
+        Nombre: 'ACABADOS BAUTISTA E.I.R.L.',
+        RUC_Estructura3: '20604562415',
+        Fecha_Campo2: '2022-12-01',
+    },
+    {
+        RUC_Campo12: '10329414251',
+        Nombre: 'ACERO RAMOS MARISA ZORAIDA',
+        RUC_Estructura3: '10329414251',
+        Fecha_Campo2: '2001-07-01',
+    },
+    {
+        RUC_Campo12: '10416563786',
+        Nombre: 'ACEVEDO CHAVEZ JORGE RONALD',
+        RUC_Estructura3: '10416563786',
+        Fecha_Campo2: '2015-09-01',
+    },
+    {
+        RUC_Campo12: '10304256228',
+        Nombre: 'ACEVEDO HERRERA PATRICIA MASSIEL',
+        RUC_Estructura3: '10304256228',
+        Fecha_Campo2: '2009-11-01',
+    },
+    {
+        RUC_Campo12: '10461889650',
+        Nombre: 'ACEVEDO RODRIGUEZ LUCY ANIKA',
+        RUC_Estructura3: '10461889650',
+        Fecha_Campo2: '2015-07-01',
+    },
+    {
+        RUC_Campo12: '10157209499',
+        Nombre: 'ACHIC ENCALADA ADA MARIA',
+        RUC_Estructura3: '10157209499',
+        Fecha_Campo2: '2004-11-01',
+    },
+    {
+        RUC_Campo12: '10157183040',
+        Nombre: 'ACHIC ENCALADA ELEUTERIO CECILIO',
+        RUC_Estructura3: '10157183040',
+        Fecha_Campo2: '2010-12-01',
+    },
+    {
+        RUC_Campo12: '10296481845',
+        Nombre: 'ACO COAGUILA OLGA RUFINA',
+        RUC_Estructura3: '10296481845',
+        Fecha_Campo2: '2010-09-01',
+    },
+    {
+        RUC_Campo12: '20558163870',
+        Nombre: 'ACOLECHSUR E.I.R.L.',
+        RUC_Estructura3: '20558163870',
+        Fecha_Campo2: '2013-06-01',
+    },
+    {
+        RUC_Campo12: '20602386156',
+        Nombre: 'ACOPIADORA CAXAMARCA E.I.R.L.',
+        RUC_Estructura3: '20602386156',
+        Fecha_Campo2: '2018-01-01',
+    },
+    {
+        RUC_Campo12: '20605677577',
+        Nombre: 'ACOPIADORA COCHAN E.I.R.L.',
+        RUC_Estructura3: '20605677577',
+        Fecha_Campo2: '2020-04-01',
+    },
+    {
+        RUC_Campo12: '20609882752',
+        Nombre: 'ACOPIADORA DE LECHE EL NOGAL E.I.R.L.',
+        RUC_Estructura3: '20609882752',
+        Fecha_Campo2: '2022-12-01',
+    },
+    {
+        RUC_Campo12: '20455954712',
+        Nombre: 'ACOPIADORA DE LECHE LAS 3 VAQUITAS E.I.R.L.',
+        RUC_Estructura3: '20455954712',
+        Fecha_Campo2: '2011-07-01',
+    },
+    {
+        RUC_Campo12: '20608757466',
+        Nombre: 'ACOPIADORA DE LECHE LAS VENTANILLAS E.I.R.L.',
+        RUC_Estructura3: '20608757466',
+        Fecha_Campo2: '2022-03-01',
+    }
+];
+
+
 // Añadimos un evento al botón de extracción
 document.querySelector('.extraer').addEventListener('click', function (event) {
     event.preventDefault(); // Prevenimos el envío del formulario
@@ -37,6 +156,17 @@ document.querySelector('.extraer').addEventListener('click', function (event) {
             // Concatenamos el año (YYYY), mes (MM), y agregamos '00'
             PeriodoInformado = partesFecha[0] + partesFecha[1] + "00";
         }
+
+        const datosProcesados = datos.map(dato => ({
+            ...dato,
+            fechaCampo2: new Date(dato.Fecha_Campo2),
+        }));
+
+        // Proceso de validación
+        const errorDeExoneracion = datosProcesados.some(dato => {
+            // Verificar condiciones
+            return dato.RUC_Campo12 === dato.RUC_Estructura3 && fechaEmision < dato.fechaCampo2;
+        });
 
         // Función para asegurar dos dígitos
         function addZero(value) {
@@ -70,6 +200,87 @@ document.querySelector('.extraer').addEventListener('click', function (event) {
         }
 
 
+        let tipoComprobante = xmlFile.getElementsByTagName("cbc:InvoiceTypeCode")[0]?.textContent || "N/A";
+
+        // Lista de medios de pago válidos según la Tabla 1 de SUNAT
+        const mediosPagoValidos = [
+            '001', '002', '003', '004', '005', '006', '007', '008', '009', '010',
+            '011', '012', '013', '101', '102', '103', '104', '105', '106', '107',
+            '108', '999'
+        ];
+
+        function calcularNumeroFinal(campo6, campo9) {
+            // Array de códigos válidos para el campo 6
+            const codigosValidosCampo6 = [
+                '00', '03', '05', '06', '07', '08', '11', '12',
+                '13', '14', '15', '16', '18', '19', '23', '26',
+                '28', '30', '34', '35', '36', '37', '55', '56',
+                '87', '88'
+            ];
+
+            // Verificamos las condiciones
+            if (codigosValidosCampo6.includes(campo6) && campo9 >= 0) {
+                return `VTA-${String(numeroSecuencialVenta).padStart(4, '0')++}`; // Retorna el número secuencial de la venta formateado
+            } else {
+                return "N/A";  // O cualquier valor por defecto que prefieras
+            }
+        }
+
+        let RUCdelProveedor = xmlFile.getElementsByTagName("cac:AccountingSupplierParty")[0]
+            ?.getElementsByTagName("cac:PartyIdentification")[0]
+            ?.getElementsByTagName("cbc:ID")[0]
+            ?.textContent || "N/A";
+
+        // Lista de RUCs no habidos de la Estructura 2 Padrón de RUCs no Habidos
+        let padronRUCNoHabidos = [
+            {
+                ruc: "12345678912", // Campo 1: RUC en la lista de no habidos
+                fechaInicio: new Date("2023-01-01"), // Campo 2: Fecha de inicio de la condición de no habido
+                fechaFin: new Date("2024-12-31") // Campo 3: Fecha de fin de la condición de no habido
+            },
+            // Se pueden agregar más registros en este array si es necesario
+        ];
+
+        // Función para verificar si el RUC está en el padrón de no habidos en la fecha del comprobante
+        function verificarRUCNoHabido(RUCProveedor, fechaEmision, padronRUCNoHabidos) {
+            for (let registro of padronRUCNoHabidos) {
+                if (registro.ruc === RUCProveedor &&
+                    fechaEmision >= registro.fechaInicio &&
+                    fechaEmision <= registro.fechaFin) {
+                    return true; // El RUC está en condición de no habido en la fecha del comprobante
+                }
+            }
+            return false; // El RUC no está en condición de no habido
+        }
+
+        // Lista de RUCs asociados al DNI (Estructura 4)
+        let padronRUCsAsociadosDNI = [
+            {
+                dni: "87654321", // Campo 1: DNI en el padrón
+                ruc: "12345678912", // Campo 12: RUC asociado al DNI
+                fechaCreacionRUC: new Date("2022-01-01") // Campo 3: Fecha de creación del RUC
+            },
+            // Se pueden agregar más registros en este array si es necesario
+        ];
+
+        // Función para verificar si el DNI/RUC está en el padrón antes de la fecha de creación del RUC
+        function verificarErrorDNIoRUC(RUCdelProveedor, fechaEmision, tipoComprobante, padronRUCsAsociadosDNI) {
+            if (tipoComprobante === "04") { // Solo aplica a Liquidaciones de Compra
+                for (let registro of padronRUCsAsociadosDNI) {
+                    if (registro.ruc === RUCdelProveedor && fechaEmision < registro.fechaCreacionRUC) {
+                        return true; // Hay un error de DNI/RUC
+                    }
+                }
+            }
+            return false; // No hay error de DNI/RUC
+        }
+
+        // Extraer el tipo de cambio del comprobante
+        let tipoCambioComprobante = xmlFile.getElementsByTagName("cbc:PricingExchangeRate")[0]
+            ?.getElementsByTagName("cbc:CalculationRate")[0]
+            ?.textContent || "N/A";
+
+        console.log(tipoCambioComprobante)
         // URL de la API de ExchangeRate-API para obtener tasas de cambio basadas en PEN
         const apiURL = 'https://api.exchangerate-api.com/v4/latest/PEN';
         // Función simple para obtener la tasa de cambio en soles
@@ -79,6 +290,7 @@ document.querySelector('.extraer').addEventListener('click', function (event) {
             // Si la moneda existe, se devuelve la tasa, si no, se retorna "N/A"
             return data.rates[monedita] || "N/A";
         }
+
         // Reemplazo sencillo del código original
         async function procesarMoneda(xmlFile) {
             // Obtener la moneda desde el XML
@@ -126,31 +338,6 @@ document.querySelector('.extraer').addEventListener('click', function (event) {
                 ?.getElementsByTagName("cbc:PayableAmount")[0]
                 ?.textContent || "N/A";
 
-            let tipoComprobante = xmlFile.getElementsByTagName("cbc:InvoiceTypeCode")[0]?.textContent || "N/A";
-            
-            // Lista de medios de pago válidos según la Tabla 1 de SUNAT
-            const mediosPagoValidos = [
-                '001', '002', '003', '004', '005', '006', '007', '008', '009', '010',
-                '011', '012', '013', '101', '102', '103', '104', '105', '106', '107',
-                '108', '999'
-            ];
-
-            function calcularNumeroFinal(campo6, campo9) {
-                // Array de códigos válidos para el campo 6
-                const codigosValidosCampo6 = [
-                    '00', '03', '05', '06', '07', '08', '11', '12',
-                    '13', '14', '15', '16', '18', '19', '23', '26',
-                    '28', '30', '34', '35', '36', '37', '55', '56',
-                    '87', '88'
-                ];
-
-                // Verificamos las condiciones
-                if (codigosValidosCampo6.includes(campo6) && campo9 >= 0) {
-                    return `VTA-${String(numeroSecuencialVenta).padStart(4, '0')++}`; // Retorna el número secuencial de la venta formateado
-                } else {
-                    return "N/A";  // O cualquier valor por defecto que prefieras
-                }
-            }
 
             // Extraemos datos específicos del XML y verificamos su existencia
             let data = {
@@ -166,10 +353,7 @@ document.querySelector('.extraer').addEventListener('click', function (event) {
                 NúmeroFinal: calcularNumeroFinal(schemeID.padStart(3, '0'), importeTotal),
                 TipoDocumento: schemeID,  // Agregamos el schemeID a la tabla de datos,
                 // RUC del Proveedor
-                RUCProveedor: xmlFile.getElementsByTagName("cac:AccountingSupplierParty")[0]
-                    ?.getElementsByTagName("cac:PartyIdentification")[0]
-                    ?.getElementsByTagName("cbc:ID")[0]
-                    ?.textContent || "N/A",
+                RUCProveedor: RUCdelProveedor,
                 // Nombre del Proveedor
                 NombreProveedor: xmlFile.getElementsByTagName("cac:AccountingSupplierParty")[0]
                     ?.getElementsByTagName("cac:PartyLegalEntity")[0]
@@ -184,21 +368,21 @@ document.querySelector('.extraer').addEventListener('click', function (event) {
                 BaseImponibleMixtas: xmlFile.getElementsByTagName("cac:TaxSubtotal")[0] //Esta por verse 
                     ?.getElementsByTagName("cbc:TaxableAmount")[0]
                     ?.textContent || "N/A",
-                IGVMixtas: "no sé qué poner",
-                BaseImponibleNoGravadas: "no sé qué poner",
-                MontoIGVIPMNoGravadas: "no sé qué poner",
-                ValorNoGravadas: "no sé qué poner",
-                ImpuestoSelectivo: "no sé qué poner",
+                IGVMixtas: "N/A",
+                BaseImponibleNoGravadas: "N/A",
+                MontoIGVIPMNoGravadas: "N/A",
+                ValorNoGravadas: "N/A",
+                ImpuestoSelectivo: "N/A",
                 ImpuestoBolsasPlásticas: Array.from(xmlFile.getElementsByTagName("cac:TaxTotal")).find(tax => tax.getElementsByTagName("cbc:ID")[0]?.textContent === "7041")?.getElementsByTagName("cbc:TaxAmount")[0]?.textContent || "00.0",
-                OtrosTributos: "no sé qué poner",
+                OtrosTributos: "N/A",
                 ImporteTotal: importeTotal,
                 CódigoMoneda: monedita_code,
                 TipodeCambio: equivalente_soles,
-                FechaComprobanteModificado: "no sé qué poner",
-                TipoComprobanteModificado: "no sé qué poner",
-                SerieComprobanteModificado: "no sé qué poner",
-                CódigoAduanero: "no sé qué poner",
-                NComprobanteModificado: "no sé qué poner",
+                FechaComprobanteModificado: xmlFile.getElementsByTagName("cbc:ModifiedDate")[0]?.textContent || "N/A",
+                TipoComprobanteModificado: xmlFile.getElementsByTagName("cbc:ModifiedType")[0]?.textContent || "N/A",
+                SerieComprobanteModificado: (xmlFile.getElementsByTagName("cbc:ModifiedID")[0]?.textContent || "N/A").split("-")[0] || "N/A", // Extraer parte antes del guion
+                CódigoAduanero: xmlFile.getElementsByTagName("cbc:CustomsCode")[0]?.textContent || "N/A",
+                NComprobanteModificado: (xmlFile.getElementsByTagName("cbc:ModifiedID")[0]?.textContent || "N/A").split("-")[1] || "N/A", // Extraer parte después del guio
                 FechaDepositoDetraccion: xmlFile.getElementsByTagName("cac:PaymentTerms")[1] //Corroborado 
                     ?.getElementsByTagName("cbc:PaymentDueDate")[0]
                     ?.textContent || "N/A",
@@ -213,10 +397,10 @@ document.querySelector('.extraer').addEventListener('click', function (event) {
                 IdentificaciónContrato: xmlFile.getElementsByTagName("cac:Contract")[0] //corroborar 
                     ?.getElementsByTagName("cbc:ID")[0]
                     ?.textContent || "N/A",
-                ErrorTipodeCambio: "no sé qué poner",
-                ErrorProveedorNoHabido: "no sé qué poner",
-                ErrorExoneración: "no sé qué poner",
-                ErrorDNIoRUC: "no sé qué poner",
+                ErrorTipodeCambio: (equivalente_soles === tipoCambioComprobante) ? "0" : "1",
+                ErrorProveedorNoHabido: verificarRUCNoHabido(RUCdelProveedor, fechaEmision, padronRUCNoHabidos) ? "1" : "N/A",
+                ErrorExoneración: errorDeExoneracion ? "1" : "0",
+                ErrorDNIoRUC: verificarErrorDNIoRUC(RUCdelProveedor, fechaEmision, tipoComprobante, padronRUCsAsociadosDNI) ? "1" : "N/A",
                 ComprobantesCancelados: mediosPagoValidos.includes(tipoComprobante.padStart(3, '0')) ? "1" : "N/A",
                 EstadoAnotaciónoAjuste: owo,
             };
