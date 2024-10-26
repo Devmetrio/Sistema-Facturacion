@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XML format</title>
-    <link rel="stylesheet" href="test.css">
+    <link rel="stylesheet" href="/css/test.css">
 </head>
 
 <body>
@@ -85,12 +85,19 @@
                 </tbody>
             </table>
         </div>
-    </form>
 
+    </form>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modalMessage"></p>
+        </div>
+    </div>
     <button class="btn-gozu" id="btnGozu" hidden>Exportar excel</button>
 
-    <script src="script.js"></script>
-    <script src="xlsx.js"></script>
+    <script type="module" src="/js/script.js"></script>
+    <script type="module" src="/js/xlsx.js"></script>
+    <script type="module" src="/js/modal.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 </body>

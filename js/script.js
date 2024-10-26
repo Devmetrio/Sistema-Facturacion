@@ -1,3 +1,4 @@
+import { showModal} from './modal.js';
 // Seleccionamos los elementos del DOM que vamos a utilizar
 const FORM = document.getElementById("formId");
 const INPUT = document.getElementById("inputId");
@@ -7,7 +8,7 @@ let contadorCUO = 1;  // Este contador puede almacenarse y recuperarse de una ba
 let contadorAsiento = 1;  // También puede almacenarse en base de datos
 let numeroSecuencialVenta;
 
-const datos = [
+const datosProcesados = [
     {
         RUC_Campo12: '20607739596',
         Nombre: 'ABRAXAS FE S.A.C.',
@@ -125,6 +126,8 @@ const datos = [
 ];
 
 
+const numerosComprobantesProcesados = new Set();
+
 // Añadimos un evento al botón de extracción
 document.querySelector('.extraer').addEventListener('click', function (event) {
     event.preventDefault(); // Prevenimos el envío del formulario
@@ -157,10 +160,21 @@ document.querySelector('.extraer').addEventListener('click', function (event) {
             PeriodoInformado = partesFecha[0] + partesFecha[1] + "00";
         }
 
-        const datosProcesados = datos.map(dato => ({
-            ...dato,
-            fechaCampo2: new Date(dato.Fecha_Campo2),
-        }));
+
+        let numeroComprobante = (xmlFile.getElementsByTagName("cbc:ID")[0]?.textContent || "N/A").split("-")[1] || "N/A";
+
+        // Aquí está tu lógica para manejar comprobantes
+        if (numerosComprobantesProcesados.has(numeroComprobante)) {
+            const mensaje = `El número de comprobante ya ha sido procesado:\n ${numeroComprobante}`;
+            console.log(mensaje); // Muestra el mensaje en la consola
+            showModal(mensaje); // Muestra el mensaje en el modal
+            return; // Detenemos la extracción si ya se ha procesado
+        }
+
+        // Si el número de comprobante no ha sido procesado, lo agregamos al conjunto
+        numerosComprobantesProcesados.add(numeroComprobante);
+
+
 
         // Proceso de validación
         const errorDeExoneracion = datosProcesados.some(dato => {
@@ -280,7 +294,6 @@ document.querySelector('.extraer').addEventListener('click', function (event) {
             ?.getElementsByTagName("cbc:CalculationRate")[0]
             ?.textContent || "N/A";
 
-        console.log(tipoCambioComprobante)
         // URL de la API de ExchangeRate-API para obtener tasas de cambio basadas en PEN
         const apiURL = 'https://api.exchangerate-api.com/v4/latest/PEN';
         // Función simple para obtener la tasa de cambio en soles
@@ -349,7 +362,7 @@ document.querySelector('.extraer').addEventListener('click', function (event) {
                 TipoComprobante: tipoComprobante,
                 SerieComprobante: (xmlFile.getElementsByTagName("cbc:ID")[0]?.textContent || "N/A").split("-")[0],  // Extraemos la parte antes del guion
                 AñoEmisión: AñoEmision,
-                NúmeroComprobante: (xmlFile.getElementsByTagName("cbc:ID")[0]?.textContent || "N/A").split("-")[1] || "N/A",  // Extraemos la parte después del guion
+                NúmeroComprobante: numeroComprobante,
                 NúmeroFinal: calcularNumeroFinal(schemeID.padStart(3, '0'), importeTotal),
                 TipoDocumento: schemeID,  // Agregamos el schemeID a la tabla de datos,
                 // RUC del Proveedor
@@ -404,6 +417,9 @@ document.querySelector('.extraer').addEventListener('click', function (event) {
                 ComprobantesCancelados: mediosPagoValidos.includes(tipoComprobante.padStart(3, '0')) ? "1" : "N/A",
                 EstadoAnotaciónoAjuste: owo,
             };
+
+
+
 
             // Insertamos los datos extraídos en la tabla
             let row = TABLE.insertRow();

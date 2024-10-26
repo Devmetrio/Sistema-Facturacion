@@ -1,0 +1,70 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    max-width: 400px;
+}
+
+.card {
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+button {
+    margin-top: 20px;
+}
+
+/* Estilos del modal */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed; /* Queda fijo en la pantalla */
+    z-index: 1000; /* Por encima de otros elementos */
+    left: 0;
+    top: 0;
+    width: 100%; /* Ancho completo */
+    height: 100%; /* Alto completo */
+    overflow: auto; /* Habilitar desplazamiento si es necesario */
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+}
+
+/* Contenido del modal */
+.modal-content {
+    background-color: #fff; /* Fondo blanco */
+    margin: 15% auto; /* 15% desde la parte superior y centrado */
+    padding: 20px; /* Espaciado interno */
+    border: 1px solid #888; /* Borde gris */
+    width: 80%; /* Ancho del modal */
+    max-width: 500px; /* Ancho máximo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+    border-radius: 5px; /* Bordes redondeados */
+}
+
+/* Estilo para el botón de cerrar */
+.close {
+    color: #aaa; /* Color gris claro */
+    float: right; /* Flotar a la derecha */
+    font-size: 28px; /* Tamaño de fuente */
+    font-weight: bold; /* Negrita */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+.close:hover,
+.close:focus {
+    color: black; /* Color negro al pasar el ratón */
+    text-decoration: none; /* Sin subrayado */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+/* Estilo del mensaje dentro del modal */
+#modalMessage {
+    margin: 10px 0; /* Margen superior e inferior */
+    font-size: 16px; /* Tamaño de fuente del mensaje */
+}
+
